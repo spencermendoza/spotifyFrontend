@@ -1,25 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import axios from 'axios';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import { LibraryProvider } from './components/Context/LibraryContext';
+import {GetLogin, HomePage} from './components';
+
+class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            url: 'none',
+        };
+    }
+
+    async componentDidMount() {
+        let url;
+        async function getURL() {
+            const loginResponse = await axios({
+                method: 'get',
+                url: 'http://localhost:8888/login',
+                withCredentials: true,
+            });
+
+            return loginResponse.data.body;
+        };
+        console.log('running getURL')
+        url = await getURL();
+        this.setState({
+            url: url,
+        });
+    }
+
+    changeLogin = () => {
+        this.setState({
+            loggedIn: true,
+        });
+    }
+
+    render() {
+        if(!this.state.loggedIn && this.state.url !== undefined) {
+            return (
+                <GetLogin changeLogin={this.changeLogin} spotifyURL={this.state.url} key={this.state.key}/>
+            )
+        } else {
+            return (
+                <LibraryProvider key={this.state.key}>
+                    <HomePage/>
+                </LibraryProvider>
+            )
+        }
+
+    };
+};
 
 export default App;
