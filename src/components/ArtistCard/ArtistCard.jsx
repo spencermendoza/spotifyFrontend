@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { LibraryContext } from '../Context/LibraryContext';
+import '../../App.css';
 
 const ArtistCard = ({artist}) => {
 

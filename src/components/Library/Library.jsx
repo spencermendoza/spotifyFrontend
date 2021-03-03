@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import '../../App.css';
 import { LibraryContext } from '../Context/LibraryContext';
 import { ArtistCard } from '../../components';
 
@@ -22,7 +22,7 @@ const Library = () => {
             return (
                 <div className='libraryPage'>
                     <h1>Here is your library:</h1>
-                    <p>You have {artistLibrary.length} artists in your library.</p>
+                    <p>You have {artistLibrary.length} artists in your library</p>
                     <ul className='artistList'>
                         {artistLibrary.map(artist => (
                             <ArtistCard artist={artist} />
@@ -35,11 +35,7 @@ const Library = () => {
         }
     }
 
-    return (
-        <div>
-            {waitingOnAPI()}
-        </div>
-    );
+    return waitingOnAPI();
 }
 
 export default Library;

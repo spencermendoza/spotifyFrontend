@@ -1,29 +1,23 @@
 import React,  { useState, useEffect, useContext, } from 'react';
 import { LibraryContext } from '../Context/LibraryContext';
+import '../../App.css';
+
 
 const GenreList = ({ props }) => {
 
     let {
         createOption,
         changeStateList,
-        selectedGenres,
+        selectedList,
     } = props;
 
-    let { artistLibrary } = useContext(LibraryContext);
+    let { artistLibrary, compileGenres } = useContext(LibraryContext);
     const [genres, setGenres] = useState([]);
 
     //simply aggregates a list of all genres present in the 
     //artistLibrary stored in LibraryContext
     useEffect(() => {
-        let genreCompiler = [];
-        artistLibrary.forEach(artist => {
-            artist.genres.forEach(genre => {
-                if (!genreCompiler.includes(genre)) {
-                    genreCompiler.push(genre);
-                }
-            })
-        })
-        genreCompiler.sort();
+        let genreCompiler = compileGenres(artistLibrary)
         setGenres(genreCompiler);
     }, [createOption]);
 
@@ -31,7 +25,7 @@ const GenreList = ({ props }) => {
     //if it is, removes option from list.
     //if it is not, adds option to list.
     const changeOption = (option) => {
-        let tempGenreList = selectedGenres;
+        let tempGenreList = selectedList;
         if (tempGenreList.includes(option.genre)) {
             const index = tempGenreList.indexOf(option.genre);
             if (index > -1) {
@@ -48,7 +42,7 @@ const GenreList = ({ props }) => {
     //if the item is selected or not
     const Checkbox = (genre, key) => {
         var checked = null;
-        if (selectedGenres.includes(genre.genre)) {
+        if (selectedList.includes(genre.genre)) {
             checked = true;
         };
         return (
@@ -61,7 +55,7 @@ const GenreList = ({ props }) => {
     }
 
     return (
-        <ul>
+        <ul className='list'>
             {genres.map((genre, i) => (
                 <Checkbox genre={genre} key={i} />
             ))}

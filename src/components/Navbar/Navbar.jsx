@@ -1,22 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { LibraryContext } from '../Context/LibraryContext';
+import { GetLogin } from '../../components';
+import '../../App.css';
+import logo from '../../img/Spotify_Logo_RGB_Black.png';
 
-const Navbar = ({displayOptions, returnOption, }) => {
+const Navbar = ({ loggedIn, changeLogin, spotifyURL }) => {
 
-    const [options, setOptions] = useState([]);
-    
-    useEffect(() => {
-        if (displayOptions) {
-            setOptions(displayOptions);
+    const { displayOptions, setContextState } = useContext(LibraryContext)
+
+    const changeOption = (value) => {
+        setContextState('display', value);
+    }
+
+    const show = () => {
+        if (loggedIn) {
+            return (
+                <div className='navbar'>
+                    <div className='logoDiv'>
+                        <img src={logo} alt='logo' className='logo'></img>
+                    </div>
+                    <ul className='menu'>
+                        {displayOptions.map((item, i) => (
+                            <li id='menuItem' key={i} onClick={() => {changeOption(item)}}>{item}</li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        } else {
+            return (
+                <div className='navbar'>
+                    <div className='logoDiv'>
+                        <img src={logo} alt='logo' className='logo'></img>
+                    </div>
+                    <GetLogin changeLogin={changeLogin} spotifyURL={spotifyURL}/>
+                </div>
+            )
         }
-    }, [])
-
-    return (
-        <ul className='navbar'>
-            {options.map((item, i) => (
-                <li key={i} onClick={() => {returnOption(item)}}>{item}</li>
-            ))}
-        </ul>
-    );
+    }
+return show();
 }
 
 export default Navbar;

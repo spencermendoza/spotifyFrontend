@@ -8,14 +8,27 @@ class LibraryProvider extends Component {
     state = {
         artistLibrary: [],
         user: {},
+        displayOptions: [
+            'My Library',
+            'Create',
+            'User Info',
+        ],
+        display: 'Base',
+        loggedIn: this.props.loggedIn,
     }
 
     async componentDidMount() {
+        if (this.state.loggedIn) {
+            await this.startup();
+        }
+    };
+
+    startup = async () => {
         let music = await this.getMusic();
         let user = await this.getUser();
-        this.setContextState('artistLibrary', music.data);
+        this.setContextState('artistLibrary', music.data.sort((a, b) => (a.name > b.name) ? 1 : -1));
         this.setContextState('user', user.data)
-    };
+    }
 
     //axios request to get music
     getMusic = () => {
@@ -44,6 +57,21 @@ class LibraryProvider extends Component {
         });
     }
 
+    //accepts a list of artists and returns the genres
+    //associated with those artists
+    compileGenres = (artistList) => {
+        let genreCompiler = [];
+        artistList.forEach(artist => {
+            artist.genres.forEach(genre => {
+                if (!genreCompiler.includes(genre)) {
+                    genreCompiler.push(genre);
+                }
+            })
+        })
+        genreCompiler.sort();
+        return genreCompiler;
+    }
+
     //should take a list of genres and a playlist name and return a list of matching artists
     findArtistsByGenre = (genreList) => {
         console.log('genreList: ', genreList)
@@ -55,7 +83,24 @@ class LibraryProvider extends Component {
                 }
             })
         })
-        return artistList;
+        let uniqueArtists = [...new Set(artistList)];
+        return uniqueArtists;
+    }
+
+    //pulls genreList out of the list of provided artists and then finds all the artists
+    //in library that match the genres on the list
+    associateArtists = (artistList) => {
+        let genreCompiler = this.compileGenres(artistList);
+        let newArtistList = this.findArtistsByGenre(genreCompiler);
+        artistList.forEach(artist => {
+            if (newArtistList.includes(artist)) {
+                return;
+            } else {
+                newArtistList.push(artist);
+            }
+        })
+        let sortedList = newArtistList.sort((a, b) => (a.name > b.name) ? 1 : -1);
+        return sortedList;
     }
 
     //takes the array of artists and holds it for now
@@ -94,9 +139,12 @@ class LibraryProvider extends Component {
             <Provider 
                 value ={{
                     ...this.state,
+                    startup: this.startup,
                     setContextState: this.setContextState,
                     findArtistsByGenre: this.findArtistsByGenre,
                     createPlaylist: this.createPlaylist,
+                    compileGenres: this.compileGenres,
+                    associateArtists: this.associateArtists,
                 }}
             >{this.props.children}</Provider>
         )

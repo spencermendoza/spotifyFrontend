@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef, useContext} from 'react';
+import { LibraryContext } from '../Context/LibraryContext';
+import '../../App.css';
 
 const GetLogin = ({changeLogin, spotifyURL}) => {
 
     const [url, setUrl] = useState({});
+    let { startup } = useContext(LibraryContext);
     const loginWindow = useRef(null);
 
     useEffect(() => {
@@ -22,6 +25,7 @@ const GetLogin = ({changeLogin, spotifyURL}) => {
             if (newWindow.closed) {
                 clearInterval(timer);
                 changeLogin();
+                startup();
             }
         }, 1000);
     }
@@ -31,11 +35,9 @@ const GetLogin = ({changeLogin, spotifyURL}) => {
             return (<p>We are generating your sign in link now</p>)
         } else {
             return (
-                <div className='container'>
-                    <button onClick={() => openSpotify()}>
-                        Click this button to log in to Spotify
-                    </button>
-                </div>
+                <button className='signInButton' onClick={() => openSpotify()}>
+                    Log In
+                </button>
             )
         }
     }

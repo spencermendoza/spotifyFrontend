@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { LibraryContext } from '../Context/LibraryContext';
 import { CreateSelections, GenreList, PlaylistMaker, ArtistList} from '../../components';
+import '../../App.css';
 
 
 const Create = () => {
@@ -29,6 +30,8 @@ const Create = () => {
         if (createOption === 'genre') {
             console.log('creating by genre')
             setArtistList(findArtistsByGenre(list));
+        } else if (createOption === 'artist') {
+            setArtistList(list);
         }
         setCreateOption('create');
     }
@@ -38,7 +41,7 @@ const Create = () => {
     const props = {
         createOption: createOption,
         setSelection: setSelection,
-        selectedGenres: list,
+        selectedList: list,
         changeStateList: changeStateList,
         artistList: artistList,
         beginCreateStage: beginCreateStage,
@@ -49,15 +52,15 @@ const Create = () => {
     const displayCreateMenu = () => {
         if (createOption === 'genre') {
             return (
-                <div className='cbGenre'>
+                <div className='create'>
                     <GenreList props={props}/>
                     <PlaylistMaker props={props}/>
                 </div>
             );
         } else if (createOption === 'artist') {
             return (
-                <div className='cbArtist'>
-                    <ArtistList />
+                <div className='create'>
+                    <ArtistList props={props}/>
                     <PlaylistMaker props={props}/>
                 </div>
             );
@@ -69,7 +72,7 @@ const Create = () => {
             )
         } else {
             return (
-                <div>
+                <div className='createPage'>
                     <p>Use this page to create playlists based on all the genres present in your library or by one or multiple artists present in your library.</p>
                     <p>Make a selection to continue.</p>
                 </div>
@@ -79,8 +82,10 @@ const Create = () => {
 
     return (
         <div className='createPage'>
-            <h1>Create a playlist:</h1>
-            <CreateSelections setSelection={setSelection}/>
+            <div className='createHead'>
+                <h1>Create a playlist</h1>
+                <CreateSelections setSelection={setSelection}/>
+            </div>
             {displayCreateMenu()}
         </div>
     );
