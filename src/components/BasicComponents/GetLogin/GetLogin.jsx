@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef, useContext} from 'react';
-import { LibraryContext } from '../Context/LibraryContext';
-import '../../App.css';
+import { LibraryContext } from '../../Context/LibraryContext';
 
 const GetLogin = ({changeLogin, spotifyURL}) => {
 
     const [url, setUrl] = useState({});
     let { startup } = useContext(LibraryContext);
-    const loginWindow = useRef(null);
 
     useEffect(() => {
         setUrl(spotifyURL)

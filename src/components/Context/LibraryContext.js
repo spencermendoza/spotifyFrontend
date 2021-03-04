@@ -17,12 +17,6 @@ class LibraryProvider extends Component {
         loggedIn: this.props.loggedIn,
     }
 
-    async componentDidMount() {
-        if (this.state.loggedIn) {
-            await this.startup();
-        }
-    };
-
     startup = async () => {
         let music = await this.getMusic();
         let user = await this.getUser();
@@ -121,6 +115,8 @@ class LibraryProvider extends Component {
         })
     }
 
+    //accepts an array of artists and puts all of that 
+    //artists saved tracks into an array
     pullTracksFromArtists = (array) => {
         let trackList = [];
         array.forEach(artist => {

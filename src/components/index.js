@@ -1,13 +1,18 @@
 
-export { default as GetLogin } from './GetLogin/GetLogin';
-export { default as HomePage } from './HomePage/HomePage';
-export { default as Navbar } from './Navbar/Navbar';
-export { default as UserInfo } from './UserInfo/UserInfo';
 export { default as Library } from './Library/Library';
-export { default as Create } from './Create/Create';
-export { default as CreateSelections } from './CreateSelections/CreateSelections';
-export { default as GenreList } from './GenreList/GenreList';
-export { default as PlaylistMaker } from './PlaylistMaker/PlaylistMaker';
+
+//Basic Components
+export { default as GetLogin } from './BasicComponents/GetLogin/GetLogin';
+export { default as HomePage } from './BasicComponents/HomePage/HomePage';
+export { default as Navbar } from './BasicComponents/Navbar/Navbar';
+export { default as UserInfo } from './BasicComponents/UserInfo/UserInfo';
+
+//Create Components
+export { default as Create } from './CreateComponents/Create/Create';
+export { default as CreateSelections } from './CreateComponents/CreateSelections/CreateSelections';
+export { default as GenreList } from './CreateComponents/GenreList/GenreList';
+export { default as PlaylistMaker } from './CreateComponents/PlaylistMaker/PlaylistMaker';
+export { default as ArtistList } from './CreateComponents/ArtistList/ArtistList';
 
 
 
@@ -15,7 +20,6 @@ export { default as PlaylistMaker } from './PlaylistMaker/PlaylistMaker';
 //maybe
 
 export { default as ArtistCard } from './ArtistCard/ArtistCard';
-export { default as ArtistList } from './ArtistList/ArtistList';
 
 
 

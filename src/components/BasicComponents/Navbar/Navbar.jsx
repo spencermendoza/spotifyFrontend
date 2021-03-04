@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { LibraryContext } from '../Context/LibraryContext';
-import { GetLogin } from '../../components';
-import '../../App.css';
-import logo from '../../img/Spotify_Logo_RGB_Black.png';
+import React, { useContext } from 'react';
+import { LibraryContext } from '../../Context/LibraryContext';
+import { GetLogin } from '../../';
+import logo from '../../../img/Spotify_Logo_RGB_Black.png';
 
 const Navbar = ({ loggedIn, changeLogin, spotifyURL }) => {
 

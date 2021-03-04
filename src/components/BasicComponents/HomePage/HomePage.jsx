@@ -1,7 +1,7 @@
-import React, { Component, useContext, useState } from 'react';
-import axios from 'axios';
-import { LibraryContext } from '../Context/LibraryContext';
-import { Navbar, PlaylistList, UserInfo, Library, Create } from '../../components';
+import React, { useContext } from 'react';
+import { LibraryContext } from '../../Context/LibraryContext';
+import { UserInfo, Library, Create } from '../../';
+import { CreateProvider } from '../../CreateComponents/CreateContext/CreateContext';
 
 const HomePage = () => {
 
@@ -12,7 +12,7 @@ const HomePage = () => {
         if (display === 'My Library') {
             return <Library />
         } else if (display === 'Create') {
-            return <Create />
+            return <CreateProvider><Create /></CreateProvider>
         } else if (display === 'User Info') {
             return <UserInfo />
         } else if (display === 'Base') {
@@ -33,7 +33,11 @@ const HomePage = () => {
                 </div>
             );
         } else {
-            return <h3>Please hold while I retrieve your music library!</h3>
+            return (
+                <div className='homeDiv'>
+                    <h3>Please hold while I retrieve your music library!</h3>
+                </div>
+            )
         }
     }
 

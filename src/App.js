@@ -3,7 +3,7 @@ import axios from 'axios';
 import './App.css';
 
 import { LibraryProvider } from './components/Context/LibraryContext';
-import {GetLogin, HomePage, Navbar} from './components';
+import {HomePage, Navbar} from './components';
 
 class App extends Component {
     constructor(props) {
