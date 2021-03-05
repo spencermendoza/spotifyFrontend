@@ -6,62 +6,7 @@ import { CreateSelections, GenreList, PlaylistMaker, ArtistList} from '../..';
 
 const Create = () => {
 
-    // let { findArtistsByGenre, compileGenres, artistLibrary } = useContext(LibraryContext);
     let { createOption, } = useContext(CreateContext);
-
-    // const [createOption, setCreateOption] = useState('');
-    const [list, setList] = useState([]);
-    const [selectedList, setSelectedList] = useState([]);
-
-    //simply sets the selected option in state,
-    //this is passed down to <CreateSelections />
-    // const setSelection = (selection) => {
-    //     console.log('creating by: ', selection);
-    //     setCreateOption(selection);
-    // }
-
-    //just a function that sets the list stored in state
-    const changeStateList = (array) => {
-        setList([...array]);
-    }
-
-    //starts the process of creating the playlist. will have more
-    //steps in the future maybe
-    // const beginCreateStage = () => {
-    //     console.log('this will be a multi part function')
-    //     if (createOption === 'genre') {
-    //         console.log('creating by genre')
-    //         let artistList = findArtistsByGenre(list);
-    //         setList(artistList);
-    //         // setArtistList(findArtistsByGenre(list));
-    //     }
-    //     setCreateOption('create');
-    // }
-
-    // const genreProps = {
-    //     genreList: compileGenres(artistLibrary),
-    //     changeStateList: changeStateList,
-    //     selectedList: list,
-    // }
-
-    // const playlistMakerProps = {
-    //     createOption: createOption,
-    //     setSelection: setSelection,
-    //     selectedList: list,
-    //     changeStateList: changeStateList,
-    //     beginCreateStage: beginCreateStage,
-    // }
-
-    //makes it easier to pass props as there are four
-    //of them so far and they were taking up too much horizontal space lol
-    // const props = {
-    //     createOption: createOption,
-    //     setSelection: setSelection,
-    //     selectedList: list,
-    //     changeStateList: changeStateList,
-    //     // artistList: artistList,
-    //     beginCreateStage: beginCreateStage,
-    // }
 
     //determines which createOption is selected and renders
     //appropriate component based on selection

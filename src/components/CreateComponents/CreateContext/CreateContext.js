@@ -38,14 +38,15 @@ class CreateProvider extends Component {
     }
 
     changeOption = (option) => {
-        console.log('option: ', option)
         let tempList = this.state.selectedList;
         if (tempList.includes(option)) {
             const index = tempList.indexOf(option);
             if (index > -1) {
+                console.log('removing option: ', option)
                 tempList.splice(index, 1);
             }
         } else {
+            console.log('adding option: ', option)
             tempList.push(option);
         }
         this.setState({
@@ -89,7 +90,6 @@ class CreateProvider extends Component {
                     setList: this.setList,
                     setSelectedList: this.setSelectedList,
                     setArtistList: this.setArtistList,
-                    // beginCreating: this.beginCreating,
                     changeOption: this.changeOption,
                     clearSelection: this.clearSelection,
                 }}

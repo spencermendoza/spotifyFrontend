@@ -68,7 +68,6 @@ class LibraryProvider extends Component {
 
     //should take a list of genres and a playlist name and return a list of matching artists
     findArtistsByGenre = (genreList) => {
-        console.log('genreList: ', genreList)
         let artistList = [];
         genreList.forEach(genre => {
             this.state.artistLibrary.forEach(artist => {

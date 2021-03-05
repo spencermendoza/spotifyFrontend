@@ -5,47 +5,24 @@ import { CreateContext } from '../CreateContext/CreateContext';
 
 const PlaylistMaker = () => {
 
-    let { createPlaylist, associateArtists, findArtistsByGenre } = useContext(LibraryContext);
-    let { selectedList, setSelectedList, setArtistList, setCreateOption, changeOption, createOption, clearSelection, artistList} = useContext(CreateContext);
+    let { 
+        createPlaylist, 
+        associateArtists, 
+        findArtistsByGenre 
+    } = useContext(LibraryContext);
+
+    let {
+        selectedList, 
+        setSelectedList, 
+        setArtistList,
+        setCreateOption, 
+        changeOption, 
+        createOption, 
+        clearSelection, 
+        artistList
+    } = useContext(CreateContext);
+
     const playlistNameRef = useRef(null);
-    // const [list, setList] = useState([]);
-
-    //checks if the selectedList object is an array
-    // useEffect(() => {
-    //     if (Array.isArray(selectedList)) {
-    //         let sortedList = selectedList.sort();
-    //         setList([...sortedList]);
-    //     }
-    // }, [selectedList]);
-
-    //clears the selected genre list
-    // const clearSelection = () => {
-    //     if (createOption === 'create') {
-    //         setSelection('');
-    //     };
-    //     changeStateList([]);
-    // }
-
-    // const removeFromList = (item) => {
-    //     console.log('remove from list? ', item)
-    //     let tempList = selectedList;
-    //     if (tempList.includes(item)) {
-    //         const index = tempList.indexOf(item);
-    //         if (index > -1) {
-    //             tempList.splice(index, 1);
-    //         }
-    //     }
-    //     changeStateList(tempList);
-    // }
-
-    const findAssociatedArtists = () => {
-        let newArtistList = associateArtists(selectedList);
-        setSelectedList(newArtistList);
-    }
-
-    // const createNewPlaylist = () => {
-    //     createPlaylist(artistList, playlistNameRef.current.value);
-    // }
 
     const beginCreateStage = () => {
         console.log('this will be a multi part function')
@@ -64,7 +41,7 @@ const PlaylistMaker = () => {
             <div className='playlistMaker'>
                 <p>Here are your selected genres so far:</p>
                 <ul className='playlistMakerList'>
-                    {selectedList.map((genre, key) => (
+                    {selectedList.sort().map((genre, key) => (
                         <li key={key} onClick={e => {changeOption(genre)}}>{genre}</li>
                     ))}
                 </ul>
@@ -82,13 +59,13 @@ const PlaylistMaker = () => {
             <div className='playlistMaker'>
                 <p>Here are your selected artists so far:</p>
                 <ul className='playlistMakerList'>
-                    {selectedList.map((artist, key) => (
+                    {selectedList.sort((a, b) => (a.name > b.name) ? 1 : -1).map((artist, key) => (
                         <li key={key} onClick={e => {changeOption(artist)}}>{artist.name}</li>
                     ))}
                 </ul>
                 <div className='createButtons'>
                     <button onClick={() => beginCreateStage()}>Show Artists</button>
-                    <button onClick={() => findAssociatedArtists()}>Associate Artists</button>
+                    <button onClick={() => setSelectedList(associateArtists(selectedList))}>Associate Artists</button>
                     <button onClick={() => clearSelection()}>Clear selection</button>
                 </div>
             </div>
@@ -102,7 +79,7 @@ const PlaylistMaker = () => {
                 <p>Here is a list of artists matching your selection:</p>
                 <ul className='playlistMakerList'>
                     {artistList.map((artist, key) => (
-                        <li key={key}>{artist.name}</li>
+                        <li key={key} onClick={e => {changeOption(artist)}}>{artist.name}</li>
                     ))}
                 </ul>
                 <form className='name-playlist'>

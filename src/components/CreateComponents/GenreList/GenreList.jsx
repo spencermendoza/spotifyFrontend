@@ -1,32 +1,16 @@
 import React,  { useContext, } from 'react';
 import { CreateContext } from '../CreateContext/CreateContext';
+import { Checkbox } from '../..';
 
 
 const GenreList = () => {
 
-    let { list, selectedList, changeOption } = useContext(CreateContext);
-
-    //simple component that creates a li with a label
-    //for the genre and a checkbox that determines
-    //if the item is selected or not
-    const Checkbox = (genre, key) => {
-        var checked = null;
-        if (selectedList.includes(genre.genre)) {
-            checked = true;
-        };
-        return (
-            <li key={key}>
-                <label>
-                    <input type='checkbox' checked={checked} value={genre.genre} onChange={e => changeOption(genre.genre)} />{genre.genre}
-                </label>
-            </li>
-        )
-    }
+    let { list } = useContext(CreateContext);
 
     return (
         <ul className='list'>
             {list.map((genre, i) => (
-                <Checkbox genre={genre} key={i} />
+                <Checkbox item={genre} key={i} />
             ))}
         </ul>
     );

@@ -4,14 +4,61 @@ import { CreateContext } from '../CreateContext/CreateContext';
 
 const CreateSelections = () => {
 
-    let { artistLibrary, compileGenres } = useContext(LibraryContext);
-    let { createOption, setCreateOption, setList, setSelectedList } = useContext(CreateContext);
+    let { artistLibrary, compileGenres, findArtistsByGenre } = useContext(LibraryContext);
+    let { createOption, selectedList, artistList, setCreateOption, setList, setSelectedList } = useContext(CreateContext);
 
 
     const beginCreating = (selection, newList) => {
-        setList(newList);
-        setCreateOption(selection);
-        setSelectedList([]);
+        //create => something else
+        if (createOption === 'create' && selection !== 'create') {
+            //create => genre
+            if (selection === 'genre') {
+                console.log('create option switched from create to genre')
+                //genre => create => genre
+                if (selectedList.every(i => (typeof i === 'string'))) {
+                    console.log('create option used to be genre')
+                    setCreateOption(selection);
+                //artist => create => genre
+                } else {
+                    console.log('create option used to be artist')
+                    let tempList = selectedList;
+                    setSelectedList(compileGenres(tempList));
+                    setCreateOption(selection);
+                    setList(newList);
+                }
+            //create => artist
+            } else if (selection === 'artist') {
+                console.log('create option switched from create to artist')
+                //artist => create => artist
+                if (selectedList.every(i => (typeof i === 'object'))) {
+                    console.log('create option used to be artist')
+                    setCreateOption(selection);
+                //genre => create => artist
+                } else {
+                    console.log('create option used to be genre')
+                    setSelectedList(artistList);
+                    setCreateOption(selection);
+                    setList(artistLibrary);
+                }
+            }
+        //artist => genre
+        } else if (createOption === 'artist' && selection === 'genre') {
+            let tempList = selectedList;
+            setSelectedList(compileGenres(tempList));
+            setCreateOption(selection);
+            setList(newList);
+        //genre => artist
+        } else if (createOption === 'genre' && selection === 'artist') {
+            let tempList = selectedList;
+            setSelectedList(findArtistsByGenre(tempList))
+            setCreateOption(selection);
+            setList(newList);
+        //any other cases just resets
+        } else {
+            setList(newList);
+            setCreateOption(selection);
+            setSelectedList([]);
+        }
     }
 
     return (

@@ -13,6 +13,7 @@ export { default as CreateSelections } from './CreateComponents/CreateSelections
 export { default as GenreList } from './CreateComponents/GenreList/GenreList';
 export { default as PlaylistMaker } from './CreateComponents/PlaylistMaker/PlaylistMaker';
 export { default as ArtistList } from './CreateComponents/ArtistList/ArtistList';
+export { default as Checkbox } from './CreateComponents/Checkbox/Checkbox';
 
 
 
