@@ -1,5 +1,7 @@
-
-export { default as Library } from './Library/Library';
+//Library Components
+export { default as Library } from './LibraryComponents/Library/Library';
+export { default as ArtistItem } from './LibraryComponents/ArtistItem/ArtistItem';
+export { default as LibraryList } from './LibraryComponents/LibraryList/LibraryList';
 
 //Basic Components
 export { default as GetLogin } from './BasicComponents/GetLogin/GetLogin';
@@ -20,7 +22,6 @@ export { default as Checkbox } from './CreateComponents/Checkbox/Checkbox';
 
 //maybe
 
-export { default as ArtistCard } from './ArtistCard/ArtistCard';
 
 
 
