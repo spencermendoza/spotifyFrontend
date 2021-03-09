@@ -1,13 +1,13 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { LibraryContext } from '../../Context/LibraryContext';
 import { CreateContext } from '../CreateContext/CreateContext';
+import { CreateButtons } from '../..';
 
 
 const PlaylistMaker = () => {
 
     let { 
         createPlaylist, 
-        associateArtists, 
         findArtistsByGenre 
     } = useContext(LibraryContext);
 
@@ -45,10 +45,11 @@ const PlaylistMaker = () => {
                         <li key={key} onClick={e => {changeOption(genre)}}>{genre}</li>
                     ))}
                 </ul>
-                <div className='createButtons'>
+                <CreateButtons />
+                {/* <div className='createButtons'>
                     <button onClick={() => beginCreateStage()}>Show Artists</button>
                     <button onClick={() => clearSelection()}>Clear selection</button>
-                </div>
+                </div> */}
             </div>
         )
     }
@@ -63,11 +64,12 @@ const PlaylistMaker = () => {
                         <li key={key} onClick={e => {changeOption(artist)}}>{artist.name}</li>
                     ))}
                 </ul>
-                <div className='createButtons'>
+                <CreateButtons />
+                {/* <div className='createButtons'>
                     <button onClick={() => beginCreateStage()}>Show Artists</button>
                     <button onClick={() => setSelectedList(associateArtists(selectedList))}>Associate Artists</button>
                     <button onClick={() => clearSelection()}>Clear selection</button>
-                </div>
+                </div> */}
             </div>
         )
     }
@@ -87,10 +89,11 @@ const PlaylistMaker = () => {
                     <input type='text' name='Name your playlist' ref={playlistNameRef}></input>
                 </form>
                 <b>Clicking 'Create' below will create a playlist with these artists</b><br></br>
-                <div className='createButtons'>
+                <CreateButtons />
+                {/* <div className='createButtons'>
                     <button onClick={() => createPlaylist(artistList, playlistNameRef.current.value)}>Create</button>
                     <button onClick={() => clearSelection()}>Clear selection</button>
-                </div>
+                </div> */}
             </div>
         )
     }

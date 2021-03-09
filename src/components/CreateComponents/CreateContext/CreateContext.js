@@ -70,6 +70,52 @@ class CreateProvider extends Component {
         })
     }
 
+    //pulls genreList out of the list of provided artists and then finds all the artists
+    //in library that match the genres on the list
+    associateArtists = (artistList, artistLibrary) => {
+        console.log('associating artists')
+        let genreCompiler = this.compileGenres(artistList);
+        let newArtistList = this.findArtistsByGenre(genreCompiler, artistLibrary);
+        artistList.forEach(artist => {
+            if (newArtistList.includes(artist)) {
+                return;
+            } else {
+                newArtistList.push(artist);
+            }
+        })
+        let sortedList = newArtistList.sort((a, b) => (a.name > b.name) ? 1 : -1);
+        return sortedList;
+    }
+
+    //accepts a list of artists and returns the genres
+    //associated with those artists
+    compileGenres = (artistList) => {
+        let genreCompiler = [];
+        artistList.forEach(artist => {
+            artist.genres.forEach(genre => {
+                if (!genreCompiler.includes(genre)) {
+                    genreCompiler.push(genre);
+                }
+            })
+        })
+        genreCompiler.sort();
+        return genreCompiler;
+    }
+
+    //should take a list of genres and a playlist name and return a list of matching artists
+    findArtistsByGenre = (genreList, artistLibrary) => {
+        let artistList = [];
+        genreList.forEach(genre => {
+            artistLibrary.forEach(artist => {
+                if (artist.genres.includes(genre)) {
+                    artistList.push(artist);
+                }
+            })
+        })
+        let uniqueArtists = [...new Set(artistList)];
+        return uniqueArtists;
+    }
+
 
 
 
@@ -92,6 +138,7 @@ class CreateProvider extends Component {
                     setArtistList: this.setArtistList,
                     changeOption: this.changeOption,
                     clearSelection: this.clearSelection,
+                    associateArtists: this.associateArtists,
                 }}
             >{this.props.children}</Provider>
         )

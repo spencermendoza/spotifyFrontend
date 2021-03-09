@@ -53,8 +53,10 @@ const CreateSelections = () => {
             setSelectedList(findArtistsByGenre(tempList))
             setCreateOption(selection);
             setList(newList);
+        } else if (createOption === selection) {
+            return;
         //any other cases just resets
-        } else {
+        }else {
             setList(newList);
             setCreateOption(selection);
             setSelectedList([]);
