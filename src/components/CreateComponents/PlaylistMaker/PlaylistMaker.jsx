@@ -1,38 +1,61 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { LibraryContext } from '../../Context/LibraryContext';
 import { CreateContext } from '../CreateContext/CreateContext';
-import { CreateButtons } from '../..';
+import { LibraryContext } from '../../Context/LibraryContext';
+import { CreateButtons, TrackList } from '../..';
 
 
 const PlaylistMaker = () => {
 
-    let { 
-        createPlaylist, 
-        findArtistsByGenre 
-    } = useContext(LibraryContext);
-
-    let {
-        selectedList, 
-        setSelectedList, 
-        setArtistList,
-        setCreateOption, 
-        changeOption, 
-        createOption, 
-        clearSelection, 
-        artistList
+    const {
+        selectedList,
+        changeOption,
+        createOption,
+        artistList,
     } = useContext(CreateContext);
+
+    const { createPlaylist } = useContext(LibraryContext);
+
+    useEffect(() => {
+        setWorkingList(artistList);
+    }, [artistList]);
 
     const playlistNameRef = useRef(null);
 
-    const beginCreateStage = () => {
-        console.log('this will be a multi part function')
-        let newArtistList = selectedList;
-        if (createOption === 'genre') {
-            console.log('creating by genre')
-            newArtistList = findArtistsByGenre(selectedList);
+    //literally just to toggle the display mode when createOption is set to 'genre'
+    const [display, setDisplay] = useState('default-genre');
+    const [workingList, setWorkingList] = useState(artistList)
+
+    //works with the display state value above to toggle
+    //back and forth the display mode when creating by genre
+    const showList = () => {
+        if (display === 'default-genre') {
+            return (
+                <ul className='playlistMakerList'>
+                    {selectedList.sort().map((genre, key) => (
+                        <li key={key} onClick={e => {changeOption(genre)}}>{genre}</li>
+                    ))}
+                </ul>
+            );
+        } else if (display === 'default-artist') {
+            return (
+                <ul className='playlistMakerList'>
+                    {artistList.sort((a, b) => (a.name > b.name) ? 1 : -1).map((artist, key) => (
+                        <li key={key}>{artist.name}</li>
+                    ))}
+                </ul>
+            )
         }
-        setArtistList(newArtistList);
-        setCreateOption('create');
+    }
+
+    const beginPlaylist = () => {
+        let name = playlistNameRef.current.value;
+        if (!name) {
+            console.log('you need a name!')
+            alert('You need to name your playlist first!')
+            playlistNameRef.current.value = 'GIVE ME A NAME FIRST'
+        } else {
+            createPlaylist(artistList, name);
+        }
     }
 
     //This is what is returned if 'createSelection' is set to 'genre'
@@ -40,16 +63,8 @@ const PlaylistMaker = () => {
         return (
             <div className='playlistMaker'>
                 <p>Here are your selected genres so far:</p>
-                <ul className='playlistMakerList'>
-                    {selectedList.sort().map((genre, key) => (
-                        <li key={key} onClick={e => {changeOption(genre)}}>{genre}</li>
-                    ))}
-                </ul>
-                <CreateButtons />
-                {/* <div className='createButtons'>
-                    <button onClick={() => beginCreateStage()}>Show Artists</button>
-                    <button onClick={() => clearSelection()}>Clear selection</button>
-                </div> */}
+                {showList()}
+                <CreateButtons display={display} setDisplay={setDisplay}/>
             </div>
         )
     }
@@ -64,12 +79,7 @@ const PlaylistMaker = () => {
                         <li key={key} onClick={e => {changeOption(artist)}}>{artist.name}</li>
                     ))}
                 </ul>
-                <CreateButtons />
-                {/* <div className='createButtons'>
-                    <button onClick={() => beginCreateStage()}>Show Artists</button>
-                    <button onClick={() => setSelectedList(associateArtists(selectedList))}>Associate Artists</button>
-                    <button onClick={() => clearSelection()}>Clear selection</button>
-                </div> */}
+                <CreateButtons/>
             </div>
         )
     }
@@ -78,18 +88,14 @@ const PlaylistMaker = () => {
     const create = () => {
         return (
             <div className='playlistMaker'>
-                <p>Here is a list of artists matching your selection:</p>
-                <ul className='playlistMakerList'>
-                    {artistList.map((artist, key) => (
-                        <li key={key} onClick={e => {changeOption(artist)}}>{artist.name}</li>
-                    ))}
-                </ul>
+                <p>Here is the current version of your playlist:</p>
+                <TrackList list={artistList}/>
                 <form className='name-playlist'>
                     <label>Name your playlist:</label>
                     <input type='text' name='Name your playlist' ref={playlistNameRef}></input>
                 </form>
                 <b>Clicking 'Create' below will create a playlist with these artists</b><br></br>
-                <CreateButtons />
+                <CreateButtons beginPlaylist={beginPlaylist}/>
                 {/* <div className='createButtons'>
                     <button onClick={() => createPlaylist(artistList, playlistNameRef.current.value)}>Create</button>
                     <button onClick={() => clearSelection()}>Clear selection</button>
@@ -110,9 +116,7 @@ const PlaylistMaker = () => {
         }
     }
 
-    return (
-        genreOrArtist()
-    );
+    return genreOrArtist();
 }
 
 export default PlaylistMaker;

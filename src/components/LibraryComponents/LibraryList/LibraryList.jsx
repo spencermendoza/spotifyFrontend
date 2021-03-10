@@ -11,13 +11,15 @@ const LibraryList = () => {
             <h1>Here is your library:</h1>
             <p>You have {artistLibrary.length} artists in your library</p>
             <table className='artistList'>
-                <thead className='artistListHead'>
+                <thead>
+                    <tr className='artistListHead'>
                         <th></th>
                         <th>Artist</th>
                         <th>Saved Albums</th>
                         <th>Saved Tracks</th>
+                    </tr>
                 </thead>
-                    <tbody className='artistListBody'>
+                <tbody className='artistListBody'>
                     {artistLibrary.map(artist => (
                             <ArtistItem artist={artist} key={artist.name}/>
                     ))}

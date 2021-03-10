@@ -5,13 +5,19 @@ const CreateContext = React.createContext();
 const { Provider, Consumer } = CreateContext;
 
 class CreateProvider extends Component {
-    state = {
-        createOption: '',
-        list: [],
-        selectedList: [],
-        artistList: [],
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            createOption: '',
+            list: [],
+            selectedList: [],
+            artistList: [],
+            trackList: [],
+        }
     }
 
+    //just state setter functions to make setting state quick
     setCreateOption = (selection) => {
         console.log('creating by: ', selection);
         this.setState({
@@ -37,6 +43,7 @@ class CreateProvider extends Component {
         })
     }
 
+    //toggles the items on or off the selected list
     changeOption = (option) => {
         let tempList = this.state.selectedList;
         if (tempList.includes(option)) {
@@ -49,18 +56,33 @@ class CreateProvider extends Component {
             console.log('adding option: ', option)
             tempList.push(option);
         }
-        this.setState({
-            selectedList: tempList,
-        })
+        this.setSelectedList(tempList)
     }
 
+    //supposed to toggle items off of the artistList in state
+    //but it's not working and idk why
+    changeArtistOption = (option) => {
+        let tempList = this.state.artistList;
+        if (tempList.includes(option)) {
+            const index = tempList.indexOf(option);
+            if (index > -1) {
+                console.log('removing this from your artistList: ', option);
+                tempList.splice(index, 1);
+            }
+        }
+        this.setArtistList(tempList);
+    }
+
+    //clears the selected and artist lists to restart the process
     clearSelection = () => {
         if (this.state.createOption === 'create') {
             this.setCreateOption('');
         };
         this.setSelectedList([]);
+        this.setArtistList([]);
     }
 
+    //completely resets state
     resetState = () => {
         this.setState({
             createOption: '',
@@ -68,6 +90,22 @@ class CreateProvider extends Component {
             selectedList: [],
             artistList: [],
         })
+    }
+
+    //this function figures out what the createOption was set to before it
+    //was set to 'create'. Then restores the progress back to that point
+    goBack = () => {
+        if (this.state.selectedList.length > 0) {
+            if (typeof this.state.selectedList[0] === 'string') {
+                this.setCreateOption('genre');
+                this.setArtistList([]);
+            } else {
+                this.setCreateOption('artist');
+                this.setArtistList([]);
+            }
+        } else {
+            this.resetState();
+        }
     }
 
     //pulls genreList out of the list of provided artists and then finds all the artists
@@ -116,16 +154,17 @@ class CreateProvider extends Component {
         return uniqueArtists;
     }
 
-
-
-
-
-
-
-
-
-
-
+    //starts the final process of creating a new playlist
+    beginCreateStage = (artistLibrary) => {
+        let newList;
+        if (this.state.createOption === 'genre') {
+            newList = this.findArtistsByGenre(this.state.selectedList, artistLibrary);
+        } else {
+            newList = this.state.selectedList;
+        }
+        this.setArtistList(newList);
+        this.setCreateOption('create');
+    }
 
     render() {
         return (
@@ -139,6 +178,11 @@ class CreateProvider extends Component {
                     changeOption: this.changeOption,
                     clearSelection: this.clearSelection,
                     associateArtists: this.associateArtists,
+                    compileGenres: this.compileGenres,
+                    findArtistsByGenre: this.findArtistsByGenre,
+                    beginCreateStage: this.beginCreateStage,
+                    changeArtistOption: this.changeArtistOption,
+                    goBack: this.goBack,
                 }}
             >{this.props.children}</Provider>
         )

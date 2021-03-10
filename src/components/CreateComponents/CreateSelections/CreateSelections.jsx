@@ -4,8 +4,17 @@ import { CreateContext } from '../CreateContext/CreateContext';
 
 const CreateSelections = () => {
 
-    let { artistLibrary, compileGenres, findArtistsByGenre } = useContext(LibraryContext);
-    let { createOption, selectedList, artistList, setCreateOption, setList, setSelectedList } = useContext(CreateContext);
+    let { artistLibrary } = useContext(LibraryContext);
+    let { 
+        createOption,
+        selectedList,
+        artistList,
+        setCreateOption,
+        setList,
+        setSelectedList,
+        compileGenres,
+        findArtistsByGenre
+    } = useContext(CreateContext);
 
 
     const beginCreating = (selection, newList) => {
@@ -50,13 +59,13 @@ const CreateSelections = () => {
         //genre => artist
         } else if (createOption === 'genre' && selection === 'artist') {
             let tempList = selectedList;
-            setSelectedList(findArtistsByGenre(tempList))
+            setSelectedList(findArtistsByGenre(tempList, artistLibrary))
             setCreateOption(selection);
             setList(newList);
         } else if (createOption === selection) {
             return;
         //any other cases just resets
-        }else {
+        } else {
             setList(newList);
             setCreateOption(selection);
             setSelectedList([]);

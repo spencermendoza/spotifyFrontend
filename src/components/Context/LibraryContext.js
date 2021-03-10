@@ -72,15 +72,16 @@ class LibraryProvider extends Component {
     //accepts an array of artists and puts all of that 
     //artists saved tracks into an array
     pullTracksFromArtists = (array) => {
-        let trackList = [];
+        let tempList = [];
         array.forEach(artist => {
             artist.music.forEach(album => {
                 album.tracks.forEach(track => {
-                    trackList.push(track.uri);
+                    tempList.push(track.uri);
                 })
             })
         })
-        console.log('trackList: ', trackList)
+        let trackList = [...new Set(tempList)];
+        console.log('trackList: ', trackList);
         return trackList;
     }
 

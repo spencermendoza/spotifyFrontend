@@ -10,7 +10,6 @@ const ArtistItem = ({artist}) => {
 
     useEffect(() => {
         formatArtist();
-        console.log(images)
     }, [artist]);
 
     const formatArtist = () => {
@@ -19,7 +18,6 @@ const ArtistItem = ({artist}) => {
         })
         if (images.length === 0) {
             images.push({url: icon});
-            console.log(artist)
         }
     }
 
