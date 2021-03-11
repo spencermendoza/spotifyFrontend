@@ -12,7 +12,7 @@ const HomePage = () => {
         if (display === 'My Library') {
             return <Library />
         } else if (display === 'Create') {
-            return <CreateProvider><Create /></CreateProvider>
+            return <Create />
         } else if (display === 'User Info') {
             return <UserInfo />
         } else if (display === 'Base') {
@@ -29,7 +29,7 @@ const HomePage = () => {
         if (artistLibrary.length > 0) {
             return (
                 <div className='homeDiv'>
-                    {showComponent()}
+                    <CreateProvider>{showComponent()}</CreateProvider>
                 </div>
             );
         } else {

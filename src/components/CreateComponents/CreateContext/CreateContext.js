@@ -28,24 +28,30 @@ class CreateProvider extends Component {
     setList = (newList) => {
         this.setState({
             list: newList,
-        })
-    }
+        });
+    };
 
     setSelectedList = (newList) => {
         this.setState({
             selectedList: newList,
-        })
-    }
+        });
+    };
 
     setArtistList = (newList) => {
         this.setState({
             artistList: newList,
-        })
-    }
+        });
+    };
+
+    setTrackList = (newList) => {
+        this.setState({
+            trackList: newList,
+        });
+    };
 
     //toggles the items on or off the selected list
-    changeOption = (option) => {
-        let tempList = this.state.selectedList;
+    changeOption = (option, checkList) => {
+        let tempList = checkList;
         if (tempList.includes(option)) {
             const index = tempList.indexOf(option);
             if (index > -1) {
@@ -56,7 +62,7 @@ class CreateProvider extends Component {
             console.log('adding option: ', option)
             tempList.push(option);
         }
-        this.setSelectedList(tempList)
+        return tempList;
     }
 
     //supposed to toggle items off of the artistList in state
@@ -154,16 +160,29 @@ class CreateProvider extends Component {
         return uniqueArtists;
     }
 
-    //starts the final process of creating a new playlist
-    beginCreateStage = (artistLibrary) => {
-        let newList;
-        if (this.state.createOption === 'genre') {
-            newList = this.findArtistsByGenre(this.state.selectedList, artistLibrary);
-        } else {
-            newList = this.state.selectedList;
-        }
-        this.setArtistList(newList);
-        this.setCreateOption('create');
+    //accepts an array of artists and puts all of that 
+    //artists saved tracks into an array
+    pullTracksFromArtists = (array) => {
+        let tempList = [];
+        array.forEach(artist => {
+            artist.music.forEach(album => {
+                album.tracks.forEach(track => {
+                    tempList.push(track);
+                })
+            })
+        })
+        let trackList = [...new Set(tempList)];
+        return trackList;
+    }
+
+    //accepts an array of track objects and creates an 
+    //array of URIs from the tracks
+    pullURIFromTracks = (array) => {
+        let URIList = [];
+        array.forEach(track => {
+            URIList.push(track.uri);
+        })
+        return URIList;
     }
 
     render() {
@@ -175,13 +194,15 @@ class CreateProvider extends Component {
                     setList: this.setList,
                     setSelectedList: this.setSelectedList,
                     setArtistList: this.setArtistList,
+                    setTrackList: this.setTrackList,
                     changeOption: this.changeOption,
                     clearSelection: this.clearSelection,
                     associateArtists: this.associateArtists,
                     compileGenres: this.compileGenres,
                     findArtistsByGenre: this.findArtistsByGenre,
-                    beginCreateStage: this.beginCreateStage,
+                    pullTracksFromArtists: this.pullTracksFromArtists,
                     changeArtistOption: this.changeArtistOption,
+                    pullURIFromTracks: this.pullURIFromTracks,
                     goBack: this.goBack,
                 }}
             >{this.props.children}</Provider>

@@ -5,13 +5,17 @@ import { LibraryContext } from '../../Context/LibraryContext';
 const CreateButtons = (props) => {
 
     let {
-        selectedList,
         createOption,
-        clearSelection,
+        selectedList,
+        trackList,
+        setCreateOption,
         setSelectedList,
+        setArtistList,
+        setTrackList,
+        clearSelection,
         associateArtists,
         findArtistsByGenre,
-        setArtistList,
+        pullTracksFromArtists,
         beginCreateStage,
         goBack,
     } = useContext(CreateContext);
@@ -34,12 +38,22 @@ const CreateButtons = (props) => {
         }
     };
 
+    const startCreating = () => {
+        let artistList = selectedList;
+        if (createOption === 'genre') {
+            artistList = findArtistsByGenre(artistList, artistLibrary);
+        };
+        let trackList = pullTracksFromArtists(artistList).sort((a, b) => (a.artists[0] > b.artists[0]) ? 1 : -1);
+        setTrackList(trackList);;
+        setCreateOption('create')
+    }
+
     const whichOption = () => {
         if (createOption === 'genre') {
             return (
                 <div className='createButtons'>
                     <button onClick={() => toggleArtists()}>{props.display === 'default-genre' ? 'Show Artists' : 'Show Selected Genres'}</button>
-                    <button onClick={() => beginCreateStage(artistLibrary)}>Show Playlist</button>
+                    <button onClick={() => startCreating()}>Show Playlist</button>
                     <button onClick={() => {clearSelection(); props.setDisplay('default-genre')}}>Clear Selection</button>
                 </div>
             );
@@ -47,7 +61,7 @@ const CreateButtons = (props) => {
             return (
                 <div className='createButtons'>
                     <button onClick={() => setSelectedList(associateArtists(selectedList, artistLibrary))}>Associate Artists</button>
-                    <button onClick={() => beginCreateStage(artistLibrary)}>Show Playlist</button>
+                    <button onClick={() => startCreating()}>Show Playlist</button>
                     <button onClick={() => {clearSelection()}}>Clear Selection</button>
                 </div>
             );

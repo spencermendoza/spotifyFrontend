@@ -206,6 +206,12 @@ Library
     padding-bottom: 7px;
 }
 
+.singleArtist table {
+    width: 75%;
+    align-self: center;
+    align-content: center;
+}
+
 .singleArtist td {
     width: 25%;
     align-self: center;

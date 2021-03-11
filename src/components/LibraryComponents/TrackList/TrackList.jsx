@@ -2,7 +2,8 @@ import React, { useContext, useState } from 'react';
 
 const TrackList = (props) => {
 
-    console.log('this should be the artist list: ', props.list);
+    // console.log('this should be the trackList: ', props.list);
+
     const eachTrack = (track) => {
         let artistList = '';
         for (let i = 0; i < track.artists.length - 1; i++) {
@@ -11,7 +12,7 @@ const TrackList = (props) => {
         }
         artistList += track.artists[track.artists.length - 1]
         return (
-            <tr className='track'>
+            <tr className='track' key={track.name} onClick={() => props.remove ? props.remove(track) : console.log(track)}>
                 <td>{track.name}</td>
                 <td>{track.albumName}</td>
                 <td>{artistList}</td>
@@ -29,12 +30,8 @@ const TrackList = (props) => {
                 </tr>
             </thead>
             <tbody>
-                {props.list.map(artist => (
-                    artist.music.map(album => (
-                        album.tracks.map(track => (
-                            eachTrack(track)
-                        ))
-                    ))
+                {props.list.map(track => (
+                    eachTrack(track)
                 ))}
             </tbody>
         </table>

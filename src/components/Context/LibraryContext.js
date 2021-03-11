@@ -57,32 +57,15 @@ class LibraryProvider extends Component {
     createPlaylist = (array, playlistName) => {
         console.log('i am about to create a playlist using this name: ', playlistName)
         console.log('just checking the array: ', array);
-        let trackList = this.pullTracksFromArtists(array);
         axios({
             method: 'post',
             url: 'http://localhost:8888/newplaylist',
             data: {
-                trackList: trackList,
+                trackList: array,
                 playlistName: playlistName,
                 user: this.state.user.id,
             }
         })
-    }
-
-    //accepts an array of artists and puts all of that 
-    //artists saved tracks into an array
-    pullTracksFromArtists = (array) => {
-        let tempList = [];
-        array.forEach(artist => {
-            artist.music.forEach(album => {
-                album.tracks.forEach(track => {
-                    tempList.push(track.uri);
-                })
-            })
-        })
-        let trackList = [...new Set(tempList)];
-        console.log('trackList: ', trackList);
-        return trackList;
     }
 
     render() {
@@ -92,9 +75,7 @@ class LibraryProvider extends Component {
                     ...this.state,
                     startup: this.startup,
                     setContextState: this.setContextState,
-                    findArtistsByGenre: this.findArtistsByGenre,
                     createPlaylist: this.createPlaylist,
-                    compileGenres: this.compileGenres,
                 }}
             >{this.props.children}</Provider>
         )

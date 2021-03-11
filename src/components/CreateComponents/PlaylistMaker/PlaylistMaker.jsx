@@ -7,10 +7,14 @@ import { CreateButtons, TrackList } from '../..';
 const PlaylistMaker = () => {
 
     const {
-        selectedList,
-        changeOption,
         createOption,
+        selectedList,
         artistList,
+        trackList,
+        setSelectedList,
+        setTrackList,
+        changeOption,
+        pullURIFromTracks,
     } = useContext(CreateContext);
 
     const { createPlaylist } = useContext(LibraryContext);
@@ -32,7 +36,7 @@ const PlaylistMaker = () => {
             return (
                 <ul className='playlistMakerList'>
                     {selectedList.sort().map((genre, key) => (
-                        <li key={key} onClick={e => {changeOption(genre)}}>{genre}</li>
+                        <li key={key} onClick={e => {setSelectedList(changeOption(genre, selectedList))}}>{genre}</li>
                     ))}
                 </ul>
             );
@@ -47,6 +51,7 @@ const PlaylistMaker = () => {
         }
     }
 
+    //starts the process of making a playlist.
     const beginPlaylist = () => {
         let name = playlistNameRef.current.value;
         if (!name) {
@@ -54,8 +59,13 @@ const PlaylistMaker = () => {
             alert('You need to name your playlist first!')
             playlistNameRef.current.value = 'GIVE ME A NAME FIRST'
         } else {
-            createPlaylist(artistList, name);
+            let trackURIs = pullURIFromTracks(trackList);
+            createPlaylist(trackURIs, name);
         }
+    }
+
+    const removeItem = (item) => {
+        setTrackList(changeOption(item, trackList))
     }
 
     //This is what is returned if 'createSelection' is set to 'genre'
@@ -76,10 +86,10 @@ const PlaylistMaker = () => {
                 <p>Here are your selected artists so far:</p>
                 <ul className='playlistMakerList'>
                     {selectedList.sort((a, b) => (a.name > b.name) ? 1 : -1).map((artist, key) => (
-                        <li key={key} onClick={e => {changeOption(artist)}}>{artist.name}</li>
+                        <li key={key} onClick={e => {setSelectedList(changeOption(artist, selectedList))}}>{artist.name}</li>
                     ))}
                 </ul>
-                <CreateButtons/>
+                <CreateButtons />
             </div>
         )
     }
@@ -89,17 +99,13 @@ const PlaylistMaker = () => {
         return (
             <div className='playlistMaker'>
                 <p>Here is the current version of your playlist:</p>
-                <TrackList list={artistList}/>
+                <TrackList list={trackList} remove={removeItem}/>
                 <form className='name-playlist'>
                     <label>Name your playlist:</label>
                     <input type='text' name='Name your playlist' ref={playlistNameRef}></input>
                 </form>
                 <b>Clicking 'Create' below will create a playlist with these artists</b><br></br>
                 <CreateButtons beginPlaylist={beginPlaylist}/>
-                {/* <div className='createButtons'>
-                    <button onClick={() => createPlaylist(artistList, playlistNameRef.current.value)}>Create</button>
-                    <button onClick={() => clearSelection()}>Clear selection</button>
-                </div> */}
             </div>
         )
     }

@@ -5,7 +5,12 @@ const Checkbox = (props) => {
 
     let { item } = props;
 
-    let { selectedList, changeOption, createOption } = useContext(CreateContext);
+    let { 
+        selectedList,
+        setSelectedList,
+        changeOption,
+    } = useContext(CreateContext);
+    
     let checked = false;
     let name = typeof item === 'object' ? item.name : item;
 
@@ -16,7 +21,7 @@ const Checkbox = (props) => {
     return (
         <li>
             <label>
-                <input type='checkbox' checked={checked} value={name} onChange={e => changeOption(item)} />{name}
+                <input type='checkbox' checked={checked} value={name} onChange={e => setSelectedList(changeOption(item, selectedList))} />{name}
             </label>
         </li>
     );
